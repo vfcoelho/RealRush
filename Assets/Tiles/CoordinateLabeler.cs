@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+[RequireComponent(typeof(TextMeshPro))]//Ensure the specified component's attachment to game object when this script is attached
 [ExecuteAlways]//Will execute in edit mode (unity) and play mode (game)
 public class CoordinateLabeler : MonoBehaviour
 {
@@ -14,7 +15,6 @@ public class CoordinateLabeler : MonoBehaviour
     TextMeshPro label;
     Vector2Int coordinates = new Vector2Int();
     Waypoint waypoint;
-
     void Awake()
     {
         label = GetComponent<TextMeshPro>();
@@ -31,7 +31,7 @@ public class CoordinateLabeler : MonoBehaviour
             DisplayCoordinates();
             UpdateObjectName();
         }
-        ColorCoordinates();
+        SetLabelColor();
         ToggleLabels();
     }
     void ToggleLabels(){
@@ -39,7 +39,7 @@ public class CoordinateLabeler : MonoBehaviour
             label.enabled = !label.IsActive();
         }
     }
-    void ColorCoordinates()
+    void SetLabelColor()
     {
         if (waypoint.IsPlaceable)
         {
@@ -52,6 +52,7 @@ public class CoordinateLabeler : MonoBehaviour
     }
     void DisplayCoordinates()
     {
+        //UnityEditor can't be used on finished built games. To ignore this script during build process, drag it to the "Editor" folder
         coordinates.x = Mathf.RoundToInt(transform.parent.position.x / UnityEditor.EditorSnapSettings.move.x);
         coordinates.y = Mathf.RoundToInt(transform.parent.position.z / UnityEditor.EditorSnapSettings.move.z);
         label.text = $"{coordinates.x},{coordinates.y}";

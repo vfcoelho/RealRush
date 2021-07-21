@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Enemy))]//Ensure the specified component's attachment to game object when this script is attached
 public class EnemyMover : MonoBehaviour
 {
     [SerializeField] List<Waypoint> path = new List<Waypoint>();
-    [SerializeField][Range(0f,5f)] float speed = 1f;
+    [SerializeField] [Range(0f, 5f)] float speed = 1f;
     Enemy enemy;
     // Start is called before the first frame update
     void OnEnable()
@@ -15,21 +16,34 @@ public class EnemyMover : MonoBehaviour
         StartCoroutine(FollowPath());
 
     }
-    void Start() {
-        enemy = GetComponent<Enemy>();    
+    void Start()
+    {
+        enemy = GetComponent<Enemy>();
     }
 
-    void FindPath(){
+    void FindPath()
+    {
         path.Clear();
-        GameObject[] waypoints = GameObject.FindGameObjectsWithTag("Path");
+        GameObject parent = GameObject.FindGameObjectWithTag("Path");
 
-        foreach(GameObject waypoint in waypoints){
-            path.Add(waypoint.GetComponent<Waypoint>());
+        foreach (Transform child in parent.transform)
+        {
+            Waypoint waypoint = child.GetComponent<Waypoint>();
+            if (waypoint != null)
+            {
+                path.Add(waypoint);
+            }
         }
     }
 
-    void PlaceInStart(){
+    void PlaceInStart()
+    {
         transform.position = path[0].transform.position;
+    }
+    void FinishPath()
+    {
+        enemy.StealGold();
+        gameObject.SetActive(false);
     }
     IEnumerator FollowPath()//IEnumerator yield return => coroutine
     {
@@ -41,17 +55,17 @@ public class EnemyMover : MonoBehaviour
 
             transform.LookAt(endPosition);
 
-            while(travelPercent < 1f){
+            while (travelPercent < 1f)
+            {
                 travelPercent += Time.deltaTime * speed;//Gets the time needed for each frame to execute
-                transform.position = Vector3.Lerp(startPosition,endPosition,travelPercent);//Linear Interpolation - soothes movement between 2 points
+                transform.position = Vector3.Lerp(startPosition, endPosition, travelPercent);//Linear Interpolation - soothes movement between 2 points
                 yield return new WaitForEndOfFrame();//deffer control (yield) and return it after the end of frame execution (WaitForSeconds)
             }
             // transform.position = waypoint.transform.position;
             // yield return new WaitForSeconds(waitTime);//deffer control (yield) and return it after one second (WaitForSeconds)
         }
         // Destroy(gameObject);
-        enemy.StealGold();
-        gameObject.SetActive(false);
+        FinishPath();
     }
 
 }
