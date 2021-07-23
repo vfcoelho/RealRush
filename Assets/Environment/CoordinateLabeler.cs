@@ -30,6 +30,7 @@ public class CoordinateLabeler : MonoBehaviour
             //only execute in unity (edit mode)
             DisplayCoordinates();
             UpdateObjectName();
+            label.enabled = true;
         }
         SetLabelColor();
         ToggleLabels();

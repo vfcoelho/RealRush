@@ -136,7 +136,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  speed: 1
+  speed: 0.5
 --- !u!114 &1174732933606460639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,8 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 043b3b9fb41cc5e4ea1734f7b1df148d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHitPoints: 5
-  currentHitPoints: 0
+  maxHitPoints: 3
+  difficultyRamp: 5
 --- !u!65 &-2286358558144160146
 BoxCollider:
   m_ObjectHideFlags: 0
