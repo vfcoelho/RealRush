@@ -45,6 +45,7 @@ public class CoordinateLabeler : MonoBehaviour
     }
     void SetLabelColor()
     {
+        // label.color = Color.red;
         if (gridManager == null) { return; }
 
         Node node = gridManager.GetNode(coordinates);
