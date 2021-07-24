@@ -33,9 +33,16 @@ public class Pathfinder : MonoBehaviour
         startNode = gridManager.Grid[startCoordinates];
         destinationNode = gridManager.Grid[destinationCoordinates];
 
-        BreadthFirstSearch();
-        BuildPath();
+        GetNewPath();
     }
+
+    public List<Node> GetNewPath()
+    {
+        gridManager.ResetNodes();
+        BreadthFirstSearch();
+        return BuildPath();
+    }
+
     void ExploreNeighbors()
     {
         List<Node> neighbors = new List<Node>();
@@ -60,6 +67,9 @@ public class Pathfinder : MonoBehaviour
 
     void BreadthFirstSearch()
     {
+        frontier.Clear();
+        reached.Clear();
+
         bool isRunning = true;
 
         frontier.Enqueue(startNode);
@@ -77,14 +87,16 @@ public class Pathfinder : MonoBehaviour
         }
     }
 
-    List<Node> BuildPath(){
+    List<Node> BuildPath()
+    {
         List<Node> path = new List<Node>();
         Node currentNode = destinationNode;
 
         path.Add(currentNode);
         currentNode.isPath = true;
 
-        while(currentNode.connectedTo != null){
+        while (currentNode.connectedTo != null)
+        {
             currentNode = currentNode.connectedTo;
             path.Add(currentNode);
             currentNode.isPath = true;
@@ -93,5 +105,22 @@ public class Pathfinder : MonoBehaviour
         path.Reverse();
 
         return path;
+    }
+
+    public bool WillBlockPath(Vector2Int coordinates)
+    {
+        if(grid.ContainsKey(coordinates)){
+            bool previousState = grid[coordinates].isWalkable;
+
+            grid[coordinates].isWalkable = false;
+            List<Node> newPath = GetNewPath();//this is an expensive operation
+            grid[coordinates].isWalkable = previousState;
+
+            if(newPath.Count <=1){
+                GetNewPath();//this is an expensive operation. It shouldn't be needed to be called twice if it didn't change object's states.
+                return true;
+            }
+        }
+        return false;
     }
 }
