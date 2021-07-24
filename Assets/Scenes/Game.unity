@@ -2178,7 +2178,7 @@ GameObject:
   - component: {fileID: 244712150}
   - component: {fileID: 244712149}
   m_Layer: 0
-  m_Name: TestObject
+  m_Name: GridManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9387,11 +9387,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29359e8641fdb3042b930770e3a699ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentSearchNode:
-    coordinates: {x: 2, y: 2}
-    isWalkable: 0
-    isExplored: 0
-    isPath: 0
+  startCoordinates: {x: 0, y: 0}
+  destinationCoordinates: {x: 3, y: 2}
 --- !u!4 &1119324834 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6609796166176614862, guid: 85afb10224b56144483999938cd95350, type: 3}
