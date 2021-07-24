@@ -71,9 +71,9 @@ public class CoordinateLabeler : MonoBehaviour
     }
     void DisplayCoordinates()
     {
-        //UnityEditor can't be used on finished built games. To ignore this script during build process, drag it to the "Editor" folder
-        coordinates.x = Mathf.RoundToInt(transform.parent.position.x / UnityEditor.EditorSnapSettings.move.x);
-        coordinates.y = Mathf.RoundToInt(transform.parent.position.z / UnityEditor.EditorSnapSettings.move.z);
+        if(gridManager == null){return;}
+        coordinates.x = Mathf.RoundToInt(transform.parent.position.x / gridManager.UnityGridSize);
+        coordinates.y = Mathf.RoundToInt(transform.parent.position.z / gridManager.UnityGridSize);
         label.text = $"{coordinates.x},{coordinates.y}";
     }
     void UpdateObjectName()
