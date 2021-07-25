@@ -7,6 +7,9 @@ public class Pathfinder : MonoBehaviour
     [SerializeField] Vector2Int startCoordinates;
     [SerializeField] Vector2Int destinationCoordinates;
 
+    public Vector2Int StartCoordinates { get { return startCoordinates; } }
+    public Vector2Int DestinationCoordinates { get { return destinationCoordinates; } }
+
     Node startNode;
     Node destinationNode;
     Node currentSearchNode;
@@ -25,14 +28,13 @@ public class Pathfinder : MonoBehaviour
         if (gridManager != null)
         {
             grid = gridManager.Grid;
+            startNode = grid[startCoordinates];
+            destinationNode = grid[destinationCoordinates];
         }
     }
     // Start is called before the first frame update
     void Start()
     {
-        startNode = gridManager.Grid[startCoordinates];
-        destinationNode = gridManager.Grid[destinationCoordinates];
-
         GetNewPath();
     }
 
@@ -67,6 +69,10 @@ public class Pathfinder : MonoBehaviour
 
     void BreadthFirstSearch()
     {
+
+        startNode.isWalkable = true;
+        destinationNode.isWalkable = true;
+
         frontier.Clear();
         reached.Clear();
 
@@ -109,14 +115,16 @@ public class Pathfinder : MonoBehaviour
 
     public bool WillBlockPath(Vector2Int coordinates)
     {
-        if(grid.ContainsKey(coordinates)){
+        if (grid.ContainsKey(coordinates))
+        {
             bool previousState = grid[coordinates].isWalkable;
 
             grid[coordinates].isWalkable = false;
             List<Node> newPath = GetNewPath();//this is an expensive operation
             grid[coordinates].isWalkable = previousState;
 
-            if(newPath.Count <=1){
+            if (newPath.Count <= 1)
+            {
                 GetNewPath();//this is an expensive operation. It shouldn't be needed to be called twice if it didn't change object's states.
                 return true;
             }
