@@ -29,11 +29,13 @@ public class Tile : MonoBehaviour
     }
     void OnMouseDown()//Needs a box collider to work
     {
-        if (gridManager.GetNode(coordinates).isWalkable && !pathfinder.WillBlockPath(coordinates))// needs to also check if we can place towers. Currently, this is block a tile without placing a tower if there is not enough gold
+        if (gridManager.GetNode(coordinates).isWalkable && !pathfinder.WillBlockPath(coordinates))
         {
-            bool isPlaced = towerPrefab.CreateTower(towerPrefab, transform.position);
-            isPlaceable = !isPlaced;
-            gridManager.BlockNode(coordinates);
+            bool isSuccessful = towerPrefab.CreateTower(towerPrefab, transform.position);
+            if(isSuccessful){
+                gridManager.BlockNode(coordinates);
+                pathfinder.NotifyReceivers();
+            }
         }
     }
 }
